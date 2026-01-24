@@ -1,14 +1,9 @@
 from DuckyRecorder.core.events import EventType
-from DuckyRecorder.core.recorder import recording_to_timeline
 import json
 
 
 class ArduinoExporter:
-    def export(self, timeline, fast_mode=True):
-        """
-        Exporta uma timeline para código Arduino HID.
-        fast_mode: se True, remove delays para execução super-rápida
-        """
+    def export(self, timeline, fast_mode=True, zero_mouse=True):
         out = []
 
         # Header
@@ -39,32 +34,30 @@ class ArduinoExporter:
             "",
         ]
 
-        for ev in timeline:
-            if ev.type == EventType.MOUSE_ZERO:
-                out.append("  mouseZero();")
+        if zero_mouse:
+            out.append("  mouseZero();")
 
-            elif ev.type == EventType.MOUSE_MOVE:
-                x = ev.data['x']
-                y = ev.data['y']
-                out.append(f"  moveFast({x}, {y});")
+        for ev in timeline:
+            if ev.type == EventType.MOUSE_MOVE:
+                out.append(f"  moveFast({ev.data['x']}, {ev.data['y']});")
                 if not fast_mode:
                     out.append(f"  delay({ev.data.get('delay', 50)});")
 
             elif ev.type == EventType.MOUSE_CLICK:
                 out.append("  Mouse.click(MOUSE_LEFT);")
                 if not fast_mode:
-                    out.append(f"  delay(50);")
+                    out.append("  delay(50);")
 
             elif ev.type == EventType.TEXT:
                 value = ev.data["value"].replace('"', '\\"')
                 out.append(f'  Keyboard.print("{value}");')
                 if not fast_mode:
-                    out.append(f"  delay(10);")
+                    out.append("  delay(10);")
 
             elif ev.type == EventType.KEY:
                 out.append(f"  Keyboard.write({self.map_key(ev.data['key'])});")
                 if not fast_mode:
-                    out.append(f"  delay(10);")
+                    out.append("  delay(10);")
 
         out += [
             "",
@@ -78,7 +71,6 @@ class ArduinoExporter:
         return "\n".join(out)
 
     def map_key(self, key):
-        """Mapeia teclas especiais para constantes Arduino"""
         mapping = {
             "Key.enter": "KEY_RETURN",
             "Key.backspace": "KEY_BACKSPACE",
@@ -93,17 +85,15 @@ class ArduinoExporter:
         return mapping.get(key, f"'{key}'" if len(key) == 1 else "0")
 
 
-# Função que o CLI usa
-def export_to_arduino(json_path: str, output_path: str, fast_mode: bool = True):
-    """
-    Lê um arquivo JSON de gravação e gera um .ino compatível com Arduino HID.
-    """
-    with open(json_path, "r") as f:
-        data = json.load(f)
+def export_to_arduino(input_path: str, output_path: str, fast_mode=True, zero_mouse=True):
+    from DuckyRecorder.core.recorder import recording_to_timeline
 
-    timeline = recording_to_timeline(data)
-    arduino = ArduinoExporter()
-    code = arduino.export(timeline, fast_mode=fast_mode)
+    with open(input_path, "r") as f:
+        recording_json = json.load(f)
+
+    timeline = recording_to_timeline(recording_json)
+    exporter = ArduinoExporter()
+    code = exporter.export(timeline, fast_mode=fast_mode, zero_mouse=zero_mouse)
 
     with open(output_path, "w") as f:
         f.write(code)
