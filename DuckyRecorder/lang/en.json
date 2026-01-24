@@ -1,0 +1,8 @@
+{
+  "app_title": "Ducky Recorder",
+  "menu_start": "Start recording",
+  "menu_stop": "Stop recording",
+  "menu_exit": "Exit",
+  "choose_option": "Choose an option",
+  "status_ready": "Ready"
+}

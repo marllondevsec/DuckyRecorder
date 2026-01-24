@@ -1,0 +1,3 @@
+# Dependências do DuckyRecorder
+pynput>=1.7.6
+colorama>=0.4.6
