@@ -1,8 +1,26 @@
 {
   "app_title": "Ducky Recorder",
   "menu_start": "Start recording",
-  "menu_stop": "Stop recording",
+  "menu_list": "List recordings",
+  "menu_export": "Export recording",
+  "menu_lang": "Change language",
   "menu_exit": "Exit",
   "choose_option": "Choose an option",
-  "status_ready": "Ready"
+  "status_ready": "Ready",
+  "recording_started": "Recording started",
+  "press_enter_stop": "Press ENTER to stop...",
+  "recording_saved": "Recording saved at:",
+  "enter_return": "ENTER to return to menu",
+  "no_recordings": "No recordings found",
+  "recordings_available": "Recordings available:",
+  "select_recording": "Select a recording:",
+  "select_export": "Select export format:",
+  "export_success": "Exported successfully:",
+  "invalid_option": "Invalid option. ENTER to continue",
+  "invalid_selection": "Invalid selection. ENTER to go back",
+  "exiting": "Exiting...",
+  "lang_set": "Language changed to: {}",
+  "select_lang": "Select a language:",
+  "lang_portuguese": "Portuguese",
+  "lang_english": "English"
 }
