@@ -13,6 +13,11 @@ SETTINGS = {
     "mouse_speed": "FAST",  # FAST, MEDIUM, SLOW
     "zero_mouse_on_start": True,
     "auto_save": True,
+    "pause_key": "F9",
+    "stop_key": "F10",
+    "default_recording_name": "",
+    "show_live_preview": True,
+    "max_events_display": 10
 }
 
 def ensure_directories():
@@ -45,3 +50,10 @@ def get_language():
     """Retorna o idioma atual da configuração"""
     config = load_config()
     return config.get("language", "pt")
+
+def update_config(key, value):
+    """Atualiza uma configuração específica"""
+    config = load_config()
+    config[key] = value
+    save_config(config)
+    return config
