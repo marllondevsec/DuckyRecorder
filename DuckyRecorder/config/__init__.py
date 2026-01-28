@@ -2,18 +2,19 @@ import os
 import json
 from pathlib import Path
 
-# Caminhos corrigidos
+# Caminhos corrigidos - Agora cria config na pasta do projeto
 BASE_DIR = Path(__file__).parent.parent.parent  # Vai até DuckyRecorder/
-PROJECT_ROOT = BASE_DIR.parent  # Vai para o diretório raiz do projeto
-RECORDINGS_DIR = PROJECT_ROOT / "recordings"
-EXPORTS_DIR = PROJECT_ROOT / "exports"
-LANG_DIR = BASE_DIR / "lang"
-CONFIG_FILE = PROJECT_ROOT / "config.json"  # Mantém na raiz do projeto (padrão)
+PROJECT_ROOT = BASE_DIR  # Mantém no diretório DuckyRecorder/
+CONFIG_DIR = PROJECT_ROOT / "config"
+CONFIG_FILE = CONFIG_DIR / "config.json"
+
+# Garante que o diretório config existe
+CONFIG_DIR.mkdir(exist_ok=True)
 
 # Configurações padrão
 SETTINGS = {
     "language": "pt",
-    "mouse_speed": "FAST",  # FAST, MEDIUM, SLOW
+    "mouse_speed": "FAST",
     "zero_mouse_on_start": True,
     "auto_save": True,
     "pause_key": "F9",
@@ -25,8 +26,11 @@ SETTINGS = {
 
 def ensure_directories():
     """Garante que os diretórios necessários existam"""
-    RECORDINGS_DIR.mkdir(exist_ok=True)
-    EXPORTS_DIR.mkdir(exist_ok=True)
+    CONFIG_DIR.mkdir(exist_ok=True)
+    recordings_dir = PROJECT_ROOT.parent / "recordings"
+    exports_dir = PROJECT_ROOT.parent / "exports"
+    recordings_dir.mkdir(exist_ok=True)
+    exports_dir.mkdir(exist_ok=True)
 
 def load_config():
     """Carrega a configuração do arquivo ou retorna padrão"""
@@ -41,14 +45,21 @@ def load_config():
                 return config
         except Exception as e:
             print(f"⚠️  Erro ao carregar config.json: {e}")
+            # Se houver erro, salva configuração padrão
+            save_config(SETTINGS.copy())
             return SETTINGS.copy()
     else:
+        # Se não existir, cria com configurações padrão
+        save_config(SETTINGS.copy())
         return SETTINGS.copy()
 
 def save_config(config):
     """Salva a configuração no arquivo"""
-    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"⚠️  Erro ao salvar config.json: {e}")
 
 def get_language():
     """Retorna o idioma atual da configuração"""
