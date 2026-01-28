@@ -29,7 +29,7 @@ class ArduinoExporter:
         last_timestamp = 0
         for ev in timeline:
             # Adiciona delay baseado no timestamp
-            if hasattr(ev, 'timestamp'):
+            if hasattr(ev, 'timestamp') and ev.timestamp is not None:
                 delay_ms = int((ev.timestamp - last_timestamp) * 1000)
                 if delay_ms > 10:  # Só adiciona delays significativos
                     out.append(f"  delay({delay_ms});")
@@ -65,7 +65,7 @@ class ArduinoExporter:
                     out.append("  delay(50);")
 
             elif ev.type == EventType.TEXT:
-                value = ev.data["value"]
+                value = ev.data.get("value", "")
                 if value == ' ':  # Espaço é tecla especial
                     out.append("  Keyboard.write(' ');")
                 elif len(value) == 1 and value.isprintable():
@@ -74,7 +74,7 @@ class ArduinoExporter:
                     out.append("  delay(10);")
 
             elif ev.type == EventType.KEY:
-                key = ev.data["key"]
+                key = ev.data.get("key", "")
                 arduino_key = self.map_key(key)
                 out.append(f"  {arduino_key};")
                 if not fast_mode:
@@ -133,8 +133,11 @@ class ArduinoExporter:
 def export_to_arduino(input_path: str, output_path: str, fast_mode=True, zero_mouse=True):
     from DuckyRecorder.core.recorder import recording_to_timeline
 
-    with open(input_path, "r") as f:
-        recording_json = json.load(f)
+    try:
+        with open(input_path, "r") as f:
+            recording_json = json.load(f)
+    except Exception as e:
+        raise Exception(f"Erro ao ler arquivo JSON: {e}")
 
     timeline = recording_to_timeline(recording_json)
     
@@ -144,22 +147,25 @@ def export_to_arduino(input_path: str, output_path: str, fast_mode=True, zero_mo
     
     for ev in timeline:
         if event_idx < len(events):
-            ev.timestamp = events[event_idx].get("timestamp", 0)
+            # Usa timestamp do evento (em segundos desde o início)
+            timestamp = events[event_idx].get("timestamp", 0)
+            if timestamp is not None:
+                ev.timestamp = timestamp
             # Avança índice para eventos que consomem múltiplos eventos do JSON
             if ev.type in [EventType.MOUSE_MOVE, EventType.MOUSE_CLICK]:
-                # Mouse move + click consome 1 evento do JSON
                 event_idx += 1
             elif ev.type == EventType.TEXT:
-                # Texto consome 1 evento do JSON
                 event_idx += 1
             elif ev.type == EventType.KEY:
-                # Tecla especial consome 1 evento do JSON
                 event_idx += 1
     
     exporter = ArduinoExporter()
     code = exporter.export(timeline, fast_mode=fast_mode, zero_mouse=zero_mouse)
 
-    with open(output_path, "w") as f:
-        f.write(code)
+    try:
+        with open(output_path, "w") as f:
+            f.write(code)
+    except Exception as e:
+        raise Exception(f"Erro ao escrever arquivo: {e}")
 
     return output_path

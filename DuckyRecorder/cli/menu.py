@@ -17,15 +17,18 @@ import json
 from pathlib import Path
 from datetime import datetime
 
+
 # Caminhos corrigidos
 BASE_DIR = Path(__file__).parent.parent.parent  # DuckyRecorder/
 PROJECT_ROOT = BASE_DIR.parent  # Diretório do projeto
 RECORDINGS_DIR = PROJECT_ROOT / "recordings"
 EXPORTS_DIR = PROJECT_ROOT / "exports"
 
+
 def _ensure_dirs():
     RECORDINGS_DIR.mkdir(exist_ok=True)
     EXPORTS_DIR.mkdir(exist_ok=True)
+
 
 def _choose_from_list(items, prompt):
     """
@@ -49,6 +52,7 @@ def _choose_from_list(items, prompt):
             if 1 <= idx <= len(items):
                 return idx - 1
         print(red(t("invalid_option")))
+
 
 def start_recording():
     """
@@ -87,6 +91,7 @@ def start_recording():
     print(green(f"{t('recording_saved')} {out_path}"))
     input(yellow(t("enter_return")))
 
+
 def list_recordings():
     """Lista gravações disponíveis e mostra informações básicas."""
     _ensure_dirs()
@@ -104,6 +109,7 @@ def list_recordings():
         print(f"  {i}) {f}")
     print()
     input(yellow(t("enter_return")))
+
 
 def export_recording():
     """Exporta uma gravação para um formato disponível em EXPORTERS."""
@@ -153,6 +159,7 @@ def export_recording():
         print(red(f"Erro ao exportar: {e}"))
     input(yellow(t("enter_return")))
 
+
 def settings_menu():
     """Menu de configurações completo com todas as opções."""
     config = load_config()
@@ -172,14 +179,30 @@ def settings_menu():
         choice = input(yellow(t("choose_option") + ": ")).strip()
 
         if choice == "1":
-            # Lista idiomas do diretório lang
-            lang_dir = BASE_DIR / "lang"
+            # CORREÇÃO: Usar o caminho correto para o diretório lang
+            lang_dir = Path(__file__).parent.parent / "lang"
+            print(cyan(f"Procurando idiomas em: {lang_dir}"))
+            
+            if not lang_dir.exists():
+                print(red(f"Diretório não encontrado: {lang_dir}"))
+                input(yellow(t("enter_return")))
+                continue
+                
             langs = []
             for p in sorted(lang_dir.glob("*.json")):
                 langs.append(p.stem)
+            
+            if not langs:
+                print(red("Nenhum arquivo de idioma encontrado"))
+                print(yellow(f"Procurando em: {lang_dir}"))
+                input(yellow(t("enter_return")))
+                continue
+                
+            print(cyan("Idiomas disponíveis:"))
             for i, l in enumerate(langs, start=1):
                 print(f"{i}) {l}")
             print("0) " + t("enter_return"))
+            
             sel = input(yellow(t("select_lang") + ": ")).strip()
             if sel == "0":
                 continue
@@ -293,6 +316,7 @@ def settings_menu():
 
         else:
             input(red(t("invalid_option")))
+
 
 def main_menu():
     # Garante que os diretórios existam
