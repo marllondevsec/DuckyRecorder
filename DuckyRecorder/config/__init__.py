@@ -2,10 +2,13 @@ import os
 import json
 from pathlib import Path
 
-BASE_DIR = Path(__file__).parent.parent.parent
-RECORDINGS_DIR = BASE_DIR / "recordings"
-LANG_DIR = BASE_DIR / "DuckyRecorder" / "lang"
-CONFIG_FILE = BASE_DIR / "config.json"
+# Caminhos corrigidos
+BASE_DIR = Path(__file__).parent.parent.parent  # Vai até DuckyRecorder/
+PROJECT_ROOT = BASE_DIR.parent  # Vai para o diretório raiz do projeto
+RECORDINGS_DIR = PROJECT_ROOT / "recordings"
+EXPORTS_DIR = PROJECT_ROOT / "exports"
+LANG_DIR = BASE_DIR / "lang"
+CONFIG_FILE = PROJECT_ROOT / "config.json"  # Mantém na raiz do projeto (padrão)
 
 # Configurações padrão
 SETTINGS = {
@@ -23,7 +26,7 @@ SETTINGS = {
 def ensure_directories():
     """Garante que os diretórios necessários existam"""
     RECORDINGS_DIR.mkdir(exist_ok=True)
-    (BASE_DIR / "exports").mkdir(exist_ok=True)
+    EXPORTS_DIR.mkdir(exist_ok=True)
 
 def load_config():
     """Carrega a configuração do arquivo ou retorna padrão"""
@@ -36,7 +39,8 @@ def load_config():
                     if key not in config:
                         config[key] = value
                 return config
-        except Exception:
+        except Exception as e:
+            print(f"⚠️  Erro ao carregar config.json: {e}")
             return SETTINGS.copy()
     else:
         return SETTINGS.copy()

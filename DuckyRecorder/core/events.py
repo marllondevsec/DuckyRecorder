@@ -1,5 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum, auto
+from typing import Optional
 
 
 class EventType(Enum):
@@ -14,3 +15,4 @@ class EventType(Enum):
 class Event:
     type: EventType
     data: dict
+    timestamp: Optional[float] = field(default=None)

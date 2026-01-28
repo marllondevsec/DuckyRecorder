@@ -216,38 +216,60 @@ class Recorder:
                 "events": self.events
             }, f, indent=2, ensure_ascii=False)
 
+
 # Função auxiliar para converter gravação em timeline
 def recording_to_timeline(recording_json: dict) -> Timeline:
     timeline = Timeline()
+    events = recording_json.get("events", [])
     
     # Adiciona evento para zerar mouse no início
     timeline.add(Event(EventType.MOUSE_ZERO, {}))
     
-    for ev in recording_json.get("events", []):
+    last_x = 0
+    last_y = 0
+    
+    for ev in events:
+        # Preserva timestamp para uso posterior
+        ev_timestamp = ev.get("timestamp", 0)
+        
         if ev["type"] == "mouse_click":
-            # Move mouse para posição
-            timeline.add(Event(
-                EventType.MOUSE_MOVE,
-                {"x": ev["x"], "y": ev["y"], "mode": "FAST"}
-            ))
+            x = ev["x"]
+            y = ev["y"]
+            
+            # Calcula movimento relativo
+            rel_x = x - last_x
+            rel_y = y - last_y
+            
+            # Só move se houver movimento significativo
+            if abs(rel_x) > 1 or abs(rel_y) > 1:
+                # Move mouse para posição
+                timeline.add(Event(
+                    EventType.MOUSE_MOVE,
+                    {"x": rel_x, "y": rel_y, "mode": "FAST", "timestamp": ev_timestamp}
+                ))
+                last_x = x
+                last_y = y
+            
             # Clique
             timeline.add(Event(
                 EventType.MOUSE_CLICK,
-                {"button": ev.get("button", "left").upper()}
+                {"button": ev.get("button", "left").upper(), "timestamp": ev_timestamp}
             ))
+            
         elif ev["type"] == "key_press":
             key = ev["key"]
+            
             # Tecla normal (caractere)
-            if len(key) == 1:
+            if len(key) == 1 and key.isprintable() and key not in ['\n', '\r', '\t']:
                 timeline.add(Event(
                     EventType.TEXT,
-                    {"value": key}
+                    {"value": key, "timestamp": ev_timestamp}
                 ))
             # Tecla especial
             else:
                 timeline.add(Event(
                     EventType.KEY,
-                    {"key": f"Key.{key.lower()}"}
+                    {"key": f"Key.{key.lower()}", "timestamp": ev_timestamp}
                 ))
     
     return timeline
