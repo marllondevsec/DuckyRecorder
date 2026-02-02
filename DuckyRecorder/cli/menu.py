@@ -19,14 +19,23 @@ from datetime import datetime
 
 
 # CORREÇÃO: Caminhos absolutos para o projeto
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # Vai até DuckyRecorder/
+# __file__ = /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/cli/menu.py
+# parent.parent.parent = /home/ghostkernel/Documents/GitHub/DuckyRecorder
+PROJECT_ROOT = Path(__file__).parent.parent.parent  # Vai até DuckyRecorder/
 RECORDINGS_DIR = PROJECT_ROOT / "recordings"
 EXPORTS_DIR = PROJECT_ROOT / "exports"
+
+print(f"DEBUG: PROJECT_ROOT = {PROJECT_ROOT}")
+print(f"DEBUG: RECORDINGS_DIR = {RECORDINGS_DIR}")
+print(f"DEBUG: EXPORTS_DIR = {EXPORTS_DIR}")
 
 
 def _ensure_dirs():
     RECORDINGS_DIR.mkdir(exist_ok=True)
     EXPORTS_DIR.mkdir(exist_ok=True)
+    print(f"DEBUG: Diretórios garantidos:")
+    print(f"  - {RECORDINGS_DIR}")
+    print(f"  - {EXPORTS_DIR}")
 
 
 def _choose_from_list(items, prompt):
@@ -348,3 +357,6 @@ def main_menu():
             break
         else:
             input(red(t("invalid_option")))
+
+# Adicionar exportação da função main_menu
+__all__ = ['main_menu']

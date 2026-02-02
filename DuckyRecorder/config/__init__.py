@@ -2,10 +2,16 @@ import os
 import json
 from pathlib import Path
 
-# CORREÇÃO: Caminho absoluto para o diretório raiz do projeto
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # Vai até DuckyRecorder/
+# Caminho absoluto para o diretório raiz do projeto
+# __file__ = /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/config/__init__.py
+# parent.parent.parent = /home/ghostkernel/Documents/GitHub/DuckyRecorder
+PROJECT_ROOT = Path(__file__).parent.parent.parent  # Vai até DuckyRecorder/
 CONFIG_DIR = PROJECT_ROOT / "config"
 CONFIG_FILE = CONFIG_DIR / "config.json"
+
+print(f"DEBUG: PROJECT_ROOT = {PROJECT_ROOT}")
+print(f"DEBUG: CONFIG_FILE = {CONFIG_FILE}")
+print(f"DEBUG: CONFIG_FILE existe? {CONFIG_FILE.exists()}")
 
 # Garante que o diretório config existe
 CONFIG_DIR.mkdir(exist_ok=True)
@@ -30,6 +36,7 @@ def ensure_directories():
     exports_dir = PROJECT_ROOT / "exports"
     recordings_dir.mkdir(exist_ok=True)
     exports_dir.mkdir(exist_ok=True)
+    print(f"DEBUG: Diretórios criados/verificados em {PROJECT_ROOT}")
 
 def load_config():
     """Carrega a configuração do arquivo ou retorna padrão"""
@@ -41,6 +48,7 @@ def load_config():
                 for key, value in SETTINGS.items():
                     if key not in config:
                         config[key] = value
+                print(f"DEBUG: Config carregada de {CONFIG_FILE}")
                 return config
         except Exception as e:
             print(f"⚠️  Erro ao carregar config.json: {e}")
@@ -49,6 +57,7 @@ def load_config():
             return SETTINGS.copy()
     else:
         # Se não existir, cria com configurações padrão
+        print(f"DEBUG: Criando config padrão em {CONFIG_FILE}")
         save_config(SETTINGS.copy())
         return SETTINGS.copy()
 
@@ -57,13 +66,16 @@ def save_config(config):
     try:
         with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
+        print(f"DEBUG: Config salva em {CONFIG_FILE}")
     except Exception as e:
         print(f"⚠️  Erro ao salvar config.json: {e}")
 
 def get_language():
     """Retorna o idioma atual da configuração"""
     config = load_config()
-    return config.get("language", "pt")
+    lang = config.get("language", "pt")
+    print(f"DEBUG: get_language() retornando: {lang}")
+    return lang
 
 def update_config(key, value):
     """Atualiza uma configuração específica"""

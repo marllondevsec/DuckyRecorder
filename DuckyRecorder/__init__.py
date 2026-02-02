@@ -77,6 +77,8 @@ def get_ducky_banner():
                         ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██                            
                         ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██                            
                         ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██                            
+                        ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██                            
+                        ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██                            
                         ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██                              
                           ██░░░░░░░░░░░░░░░░░░░░░░░░░░██                                
                             ██████░░░░░░░░░░░░░░░░████                                  
@@ -226,3 +228,8 @@ def get_banner(screen_width=80):
 def show_banner():
     """Exibe o banner do DuckyRecorder"""
     print(get_banner())
+
+# Exportar funções importantes
+__all__ = ['show_banner', 'get_banner', 'get_ducky_banner', 
+           'get_compact_banner', 'get_minimal_banner', 
+           '__version__', '__author__']
