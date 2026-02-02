@@ -3,8 +3,9 @@ import os
 from pathlib import Path
 from DuckyRecorder.config import get_language
 
-BASE_DIR = Path(__file__).parent.parent
-LANG_DIR = BASE_DIR / "lang"
+# CORREÇÃO: Caminho absoluto para o diretório lang
+BASE_DIR = Path(__file__).parent.parent.parent.parent  # Vai até DuckyRecorder/
+LANG_DIR = BASE_DIR / "DuckyRecorder" / "lang"
 
 class LanguageManager:
     def __init__(self):

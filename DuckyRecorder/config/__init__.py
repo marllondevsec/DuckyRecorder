@@ -2,9 +2,8 @@ import os
 import json
 from pathlib import Path
 
-# Caminhos corrigidos - Agora cria config na pasta do projeto
-BASE_DIR = Path(__file__).parent.parent.parent  # Vai até DuckyRecorder/
-PROJECT_ROOT = BASE_DIR  # Mantém no diretório DuckyRecorder/
+# CORREÇÃO: Caminho absoluto para o diretório raiz do projeto
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # Vai até DuckyRecorder/
 CONFIG_DIR = PROJECT_ROOT / "config"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 
@@ -27,8 +26,8 @@ SETTINGS = {
 def ensure_directories():
     """Garante que os diretórios necessários existam"""
     CONFIG_DIR.mkdir(exist_ok=True)
-    recordings_dir = PROJECT_ROOT.parent / "recordings"
-    exports_dir = PROJECT_ROOT.parent / "exports"
+    recordings_dir = PROJECT_ROOT / "recordings"
+    exports_dir = PROJECT_ROOT / "exports"
     recordings_dir.mkdir(exist_ok=True)
     exports_dir.mkdir(exist_ok=True)
 

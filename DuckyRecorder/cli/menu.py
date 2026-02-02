@@ -18,9 +18,8 @@ from pathlib import Path
 from datetime import datetime
 
 
-# Caminhos corrigidos
-BASE_DIR = Path(__file__).parent.parent.parent  # DuckyRecorder/
-PROJECT_ROOT = BASE_DIR.parent  # Diretório do projeto
+# CORREÇÃO: Caminhos absolutos para o projeto
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # Vai até DuckyRecorder/
 RECORDINGS_DIR = PROJECT_ROOT / "recordings"
 EXPORTS_DIR = PROJECT_ROOT / "exports"
 
