@@ -5,6 +5,7 @@ from DuckyRecorder.exporters import EXPORTERS
 from DuckyRecorder.core.language import t, set_language, get_current_language
 from DuckyRecorder.config import load_config, save_config, update_config, CONFIG_FILE
 from DuckyRecorder.core.hotkeys import get_available_keys
+from DuckyRecorder.utils.logger import debug, info, warning, error, logger
 import sys
 import os
 
@@ -25,17 +26,17 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent  # Vai até DuckyRecorder/
 RECORDINGS_DIR = PROJECT_ROOT / "recordings"
 EXPORTS_DIR = PROJECT_ROOT / "exports"
 
-print(f"DEBUG: PROJECT_ROOT = {PROJECT_ROOT}")
-print(f"DEBUG: RECORDINGS_DIR = {RECORDINGS_DIR}")
-print(f"DEBUG: EXPORTS_DIR = {EXPORTS_DIR}")
+debug(f"PROJECT_ROOT = {PROJECT_ROOT}")
+debug(f"RECORDINGS_DIR = {RECORDINGS_DIR}")
+debug(f"EXPORTS_DIR = {EXPORTS_DIR}")
 
 
 def _ensure_dirs():
     RECORDINGS_DIR.mkdir(exist_ok=True)
     EXPORTS_DIR.mkdir(exist_ok=True)
-    print(f"DEBUG: Diretórios garantidos:")
-    print(f"  - {RECORDINGS_DIR}")
-    print(f"  - {EXPORTS_DIR}")
+    debug(f"Diretórios garantidos:")
+    debug(f"  - {RECORDINGS_DIR}")
+    debug(f"  - {EXPORTS_DIR}")
 
 
 def _choose_from_list(items, prompt):
@@ -189,7 +190,7 @@ def settings_menu():
         if choice == "1":
             # CORREÇÃO: Usar o caminho correto para o diretório lang
             lang_dir = Path(__file__).parent.parent / "lang"
-            print(cyan(f"Procurando idiomas em: {lang_dir}"))
+            info(f"Procurando idiomas em: {lang_dir}")
             
             if not lang_dir.exists():
                 print(red(f"Diretório não encontrado: {lang_dir}"))
@@ -233,6 +234,7 @@ def settings_menu():
             update_config("show_live_preview", new_val)
             config = load_config()
             state = "ON" if new_val else "OFF"
+            info(f"show_live_preview: {state}")
             print(green(f"show_live_preview: {state}"))
             input(yellow(t("enter_return")))
 
@@ -254,11 +256,13 @@ def settings_menu():
                         new_key = available_keys[idx]
                         update_config("pause_key", new_key)
                         config = load_config()
+                        info(f"Tecla de pausa definida como: {new_key}")
                         print(green(f"Tecla de pausa definida como: {new_key}"))
                         input(yellow(t("enter_return")))
                         continue
                 print(red("Seleção inválida!"))
             except Exception as e:
+                error(f"Erro: {e}")
                 print(red(f"Erro: {e}"))
             input(yellow(t("enter_return")))
 
@@ -280,11 +284,13 @@ def settings_menu():
                         new_key = available_keys[idx]
                         update_config("stop_key", new_key)
                         config = load_config()
+                        info(f"Tecla de parada definida como: {new_key}")
                         print(green(f"Tecla de parada definida como: {new_key}"))
                         input(yellow(t("enter_return")))
                         continue
                 print(red("Seleção inválida!"))
             except Exception as e:
+                error(f"Erro: {e}")
                 print(red(f"Erro: {e}"))
             input(yellow(t("enter_return")))
 
@@ -304,6 +310,7 @@ def settings_menu():
                 if 0 <= idx < len(speeds):
                     update_config("mouse_speed", speeds[idx])
                     config = load_config()
+                    info(f"Velocidade do mouse definida como: {speeds[idx]}")
                     print(green(f"Velocidade do mouse definida como: {speeds[idx]}"))
                     input(yellow(t("enter_return")))
                     continue
@@ -316,6 +323,7 @@ def settings_menu():
             update_config('zero_mouse_on_start', new_val)
             config = load_config()
             state = "ON" if new_val else "OFF"
+            info(f"Zerar mouse no início: {state}")
             print(green(f"Zerar mouse no início: {state}"))
             input(yellow(t("enter_return")))
 
@@ -324,6 +332,73 @@ def settings_menu():
 
         else:
             input(red(t("invalid_option")))
+
+
+def show_debug_logs():
+    """Exibe os logs de debug em um submenu"""
+    while True:
+        clear()
+        show_banner()
+        print()
+        print(cyan("📋 LOGS DE DEBUG"))
+        print()
+        
+        messages = logger.get_messages(20)  # Últimas 20 mensagens
+        if not messages:
+            print(yellow("Nenhuma mensagem de debug disponível."))
+        else:
+            for i, msg in enumerate(messages, 1):
+                # Remove o timestamp para visualização mais limpa
+                if "DEBUG]" in msg:
+                    # Mensagens DEBUG em cinza
+                    print(f"\033[90m{i:2}) {msg[15:]}\033[0m")
+                elif "INFO]" in msg:
+                    # Mensagens INFO em azul
+                    print(f"\033[94m{i:2}) {msg[15:]}\033[0m")
+                elif "WARNING]" in msg:
+                    # Mensagens WARNING em amarelo
+                    print(f"\033[93m{i:2}) {msg[15:]}\033[0m")
+                elif "ERROR]" in msg:
+                    # Mensagens ERROR em vermelho
+                    print(f"\033[91m{i:2}) {msg[15:]}\033[0m")
+                else:
+                    print(f"{i:2}) {msg[15:]}")
+        
+        print()
+        print(green("1) Atualizar logs"))
+        print(green("2) Limpar logs"))
+        print(green("3) Mostrar todos os logs (últimos 100)"))
+        print(green("4) Exportar logs para arquivo"))
+        print(red("0) Voltar"))
+        
+        choice = input(yellow("Escolha uma opção: ")).strip()
+        
+        if choice == "1":
+            continue  # Apenas atualiza a tela
+        elif choice == "2":
+            logger.clear()
+            print(green("Logs limpos com sucesso!"))
+            input(yellow("ENTER para continuar..."))
+        elif choice == "3":
+            messages = logger.get_messages(100)
+            clear()
+            print(cyan("📋 TODOS OS LOGS (ÚLTIMOS 100)"))
+            print("-" * 80)
+            for msg in messages:
+                print(msg)
+            print("-" * 80)
+            input(yellow("\nENTER para voltar..."))
+        elif choice == "4":
+            if logger.log_file and logger.log_file.exists():
+                print(green(f"Logs exportados para: {logger.log_file}"))
+                print(yellow(f"Total de mensagens: {len(logger.messages)}"))
+            else:
+                print(red("Arquivo de log não encontrado!"))
+            input(yellow("ENTER para continuar..."))
+        elif choice == "0":
+            break
+        else:
+            input(red("Opção inválida!"))
 
 
 def main_menu():
@@ -339,6 +414,7 @@ def main_menu():
         print(green("2) " + t("menu_list")))
         print(green("3) " + t("menu_export")))
         print(green("4) " + t("menu_settings")))
+        print(green("5) 📋 Logs de debug"))
         print(red("0) " + t("menu_exit") + "\n"))
 
         choice = input(yellow(t("choose_option") + ": ")).strip()
@@ -351,6 +427,8 @@ def main_menu():
             export_recording()
         elif choice == "4":
             settings_menu()
+        elif choice == "5":  # NOVA OPÇÃO
+            show_debug_logs()
         elif choice == "0":
             clear()
             print(red(t("exiting")))

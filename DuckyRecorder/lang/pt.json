@@ -22,5 +22,14 @@
   "lang_set": "Idioma alterado para: {}",
   "select_lang": "Selecione um idioma:",
   "lang_portuguese": "Português",
-  "lang_english": "English"
+  "lang_english": "English",
+  "menu_logs": "Logs de debug",
+  "logs_title": "Logs de Debug",
+  "no_logs": "Nenhuma mensagem de debug disponível",
+  "logs_cleared": "Logs limpos com sucesso",
+  "export_logs": "Exportar logs para arquivo",
+  "refresh": "Atualizar",
+  "clear_logs": "Limpar logs",
+  "show_all_logs": "Mostrar todos os logs",
+  "export_logs": "Exportar logs"
 }

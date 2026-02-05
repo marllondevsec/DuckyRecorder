@@ -22,5 +22,14 @@
   "lang_set": "Language changed to: {}",
   "select_lang": "Select a language:",
   "lang_portuguese": "Portuguese",
-  "lang_english": "English"
+  "lang_english": "English",
+  "menu_logs": "Debug Logs",
+  "logs_title": "Debug Logs",
+  "no_logs": "No debug messages available",
+  "logs_cleared": "Logs cleared successfully",
+  "export_logs": "Export logs to file",
+  "refresh": "Refresh",
+  "clear_logs": "Clear logs",
+  "show_all_logs": "Show all logs",
+  "export_logs": "Export logs"
 }
