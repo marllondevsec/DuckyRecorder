@@ -1,0 +1,40 @@
+22:52:34.074 [DEBUG] PROJECT_ROOT = /home/ghostkernel/Documents/GitHub/DuckyRecorder
+22:52:34.075 [DEBUG] CONFIG_FILE = /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:34.075 [DEBUG] CONFIG_FILE existe? True
+22:52:34.075 [DEBUG] LANG_DIR = /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang
+22:52:34.075 [DEBUG] Existe? True
+22:52:34.075 [DEBUG] PROJECT_ROOT = /home/ghostkernel/Documents/GitHub/DuckyRecorder
+22:52:34.075 [DEBUG] RECORDINGS_DIR = /home/ghostkernel/Documents/GitHub/DuckyRecorder/recordings
+22:52:34.075 [DEBUG] EXPORTS_DIR = /home/ghostkernel/Documents/GitHub/DuckyRecorder/exports
+22:52:34.075 [DEBUG] Diretórios criados/verificados em /home/ghostkernel/Documents/GitHub/DuckyRecorder
+22:52:34.075 [DEBUG] Diretórios garantidos:
+22:52:34.075 [DEBUG]   - /home/ghostkernel/Documents/GitHub/DuckyRecorder/recordings
+22:52:34.076 [DEBUG]   - /home/ghostkernel/Documents/GitHub/DuckyRecorder/exports
+22:52:34.079 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:34.080 [DEBUG] get_language() retornando: pt
+22:52:34.080 [DEBUG] Idioma obtido da config = pt
+22:52:34.080 [DEBUG] Tentando carregar /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang/pt.json
+22:52:34.080 [DEBUG] Existe? True
+22:52:34.080 [DEBUG] Carregado com sucesso, 32 strings
+22:52:44.555 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:46.503 [INFO] Procurando idiomas em: /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang
+22:52:47.177 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:47.178 [DEBUG] Config salva em /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:47.178 [DEBUG] Tentando carregar /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang/pt.json
+22:52:47.178 [DEBUG] Existe? True
+22:52:47.178 [DEBUG] Carregado com sucesso, 32 strings
+22:52:47.178 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:48.876 [INFO] Procurando idiomas em: /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang
+22:52:49.525 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:49.525 [DEBUG] Config salva em /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:49.526 [DEBUG] Tentando carregar /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang/en.json
+22:52:49.526 [DEBUG] Existe? True
+22:52:49.526 [DEBUG] Carregado com sucesso, 32 strings
+22:52:49.526 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:50.834 [INFO] Procurando idiomas em: /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang
+22:52:51.523 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:51.523 [DEBUG] Config salva em /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+22:52:51.524 [DEBUG] Tentando carregar /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang/pt.json
+22:52:51.524 [DEBUG] Existe? True
+22:52:51.524 [DEBUG] Carregado com sucesso, 32 strings
+22:52:51.524 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json

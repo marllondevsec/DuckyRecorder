@@ -25,8 +25,14 @@ class DebugLogger:
         self.enabled = True
         self.log_file = None
         
-        # Criar diretório de logs
-        self.logs_dir = Path(__file__).parent.parent.parent.parent / "logs"
+        # CORREÇÃO: Determinar o diretório do projeto de forma dinâmica
+        # Usando a mesma lógica do config.py para consistência
+        # __file__ = /caminho/para/DuckyRecorder/DuckyRecorder/utils/logger.py
+        # parent.parent.parent = /caminho/para/DuckyRecorder/ (raiz do projeto)
+        PROJECT_ROOT = Path(__file__).parent.parent.parent
+        
+        # Criar diretório de logs dentro do projeto
+        self.logs_dir = PROJECT_ROOT / "logs"
         self.logs_dir.mkdir(exist_ok=True)
         
         # Criar arquivo de log com timestamp
@@ -52,8 +58,9 @@ class DebugLogger:
         try:
             with open(self.log_file, 'a', encoding='utf-8') as f:
                 f.write(log_entry + '\n')
-        except:
-            pass
+        except Exception as e:
+            # Se não conseguir escrever no arquivo, apenas imprime no stderr
+            print(f"\033[91mErro ao escrever no log: {e}\033[0m", file=sys.stderr)
         
         # Imprime no console apenas se for debug (para não poluir o menu)
         if level == "DEBUG":
