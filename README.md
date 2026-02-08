@@ -1,5 +1,4 @@
-# 🦆 DuckyRecorder
-
+# 🦆 DuckyRecorder v1.3
 DuckyRecorder é uma ferramenta CLI avançada para gravação de eventos HID (teclado e mouse) e exportação desses eventos em formatos compatíveis com Rubber Ducky e Arduino Leonardo/ATmega32u4. Permite automação e reprodução de interações humanas com precisão temporal.
 
 ---
