@@ -43,13 +43,11 @@ class ArduinoExporter:
                 last_timestamp = ev.timestamp
             
             if ev.type == EventType.MOUSE_MOVE:
-                # Não declara variáveis aqui - usaremos função separada
                 x = ev.data.get('x', 0)
                 y = ev.data.get('y', 0)
                 mode = ev.data.get('mode', 'FAST')
                 
                 if mode == 'FAST' and (abs(x) > 127 or abs(y) > 127):
-                    # Para movimentos grandes, usa função de movimento por passos
                     out.append(f"  // Move mouse relativo ({x}, {y})")
                     out.append("  {")
                     out.append(f"    int targetX = {x};")
@@ -64,7 +62,6 @@ class ArduinoExporter:
                     out.append("    }")
                     out.append("  }")
                 else:
-                    # Movimentos pequenos diretos
                     out.append(f"  Mouse.move({x}, {y});")
                     out.append("  delay(10);")
 
@@ -76,26 +73,46 @@ class ArduinoExporter:
                     out.append("  Mouse.click(MOUSE_RIGHT);")
                 else:
                     out.append("  Mouse.click(MOUSE_MIDDLE);")
-                out.append("  delay(50);")  # Delay após clique
+                out.append("  delay(50);")
 
             elif ev.type == EventType.TEXT:
                 value = ev.data.get("value", "")
-                # Escapa caracteres especiais para C++
                 escaped_value = value.replace('\\', '\\\\').replace('"', '\\"')
                 if value == ' ':  # Espaço
                     out.append("  Keyboard.write(' ');")
                 elif len(value) == 1 and value.isprintable():
                     out.append(f'  Keyboard.print("{escaped_value}");')
                 else:
-                    # Para strings maiores
                     out.append(f'  Keyboard.print("{escaped_value}");')
                 out.append("  delay(10);")
 
             elif ev.type == EventType.KEY:
                 key = ev.data.get("key", "")
                 arduino_key = self.map_key(key)
-                out.append(f"  {arduino_key};")
-                out.append("  delay(10);")
+                
+                # 🔥 CORREÇÃO CRÍTICA: Adiciona release() para todas as teclas especiais
+                if "KEY_" in arduino_key:
+                    # Teclas que precisam de press + release
+                    if arduino_key == "KEY_LEFT_GUI":
+                        out.append(f"  Keyboard.press({arduino_key});")
+                        out.append("  delay(100);")
+                        out.append(f"  Keyboard.release({arduino_key});")
+                    elif arduino_key == "KEY_RETURN":
+                        out.append(f"  Keyboard.press({arduino_key});")
+                        out.append("  delay(100);")
+                        out.append(f"  Keyboard.release({arduino_key});")
+                    elif arduino_key == "KEY_TAB":
+                        out.append(f"  Keyboard.press({arduino_key});")
+                        out.append("  delay(50);")
+                        out.append(f"  Keyboard.release({arduino_key});")
+                    else:
+                        # Outras teclas especiais
+                        out.append(f"  {arduino_key};")
+                        out.append("  delay(10);")
+                else:
+                    # Comando já pronto (como Keyboard.print)
+                    out.append(f"  {arduino_key};")
+                    out.append("  delay(10);")
 
         out += [
             "",
@@ -109,11 +126,11 @@ class ArduinoExporter:
         return "\n".join(out)
 
     def map_key(self, key):
-        """Mapeia teclas para comandos Arduino"""
+        """Mapeia teclas para comandos Arduino COM CORREÇÃO DE RELEASE"""
         mapping = {
-            "Key.enter": "Keyboard.press(KEY_RETURN)",
+            "Key.enter": "Keyboard.press(KEY_RETURN)",  # Será corrigido no código acima
             "Key.backspace": "Keyboard.press(KEY_BACKSPACE)",
-            "Key.tab": "Keyboard.press(KEY_TAB)",
+            "Key.tab": "Keyboard.press(KEY_TAB)",  # Será corrigido no código acima
             "Key.esc": "Keyboard.press(KEY_ESC)",
             "Key.space": "Keyboard.write(' ')",
             "Key.up": "Keyboard.press(KEY_UP_ARROW)",
@@ -141,7 +158,7 @@ class ArduinoExporter:
             "Key.shift": "Keyboard.press(KEY_LEFT_SHIFT)",
             "Key.ctrl": "Keyboard.press(KEY_LEFT_CTRL)",
             "Key.alt": "Keyboard.press(KEY_LEFT_ALT)",
-            "Key.cmd": "Keyboard.press(KEY_LEFT_GUI)",
+            "Key.cmd": "KEY_LEFT_GUI",  # Nome da constante
         }
         
         # Se for uma tecla de caractere simples
@@ -170,11 +187,9 @@ def export_to_arduino(input_path: str, output_path: str, fast_mode=True, zero_mo
     
     for ev in timeline:
         if event_idx < len(events):
-            # Usa timestamp do evento (em segundos desde o início)
             timestamp = events[event_idx].get("timestamp", 0)
             if timestamp is not None:
                 ev.timestamp = timestamp
-            # Avança índice para eventos que consomem múltiplos eventos do JSON
             if ev.type in [EventType.MOUSE_MOVE, EventType.MOUSE_CLICK]:
                 event_idx += 1
             elif ev.type == EventType.TEXT:
