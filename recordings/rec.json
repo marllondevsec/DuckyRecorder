@@ -1,9 +1,0 @@
-{
-  "events": [
-    {"type": "key_press", "key": "cmd", "timestamp": 1.0},
-    {"type": "key_press", "key": "c", "timestamp": 1.5},
-    {"type": "key_press", "key": "m", "timestamp": 1.6},
-    {"type": "key_press", "key": "d", "timestamp": 1.7},
-    {"type": "key_press", "key": "enter", "timestamp": 2.0}
-  ]
-}
