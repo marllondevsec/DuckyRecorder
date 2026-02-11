@@ -1,0 +1,21 @@
+23:31:06.751 [DEBUG] PROJECT_ROOT = /home/ghostkernel/Documents/GitHub/DuckyRecorder
+23:31:06.751 [DEBUG] CONFIG_FILE = /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+23:31:06.751 [DEBUG] CONFIG_FILE existe? True
+23:31:06.751 [DEBUG] LANG_DIR = /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang
+23:31:06.751 [DEBUG] Existe? True
+23:31:06.752 [DEBUG] PROJECT_ROOT = /home/ghostkernel/Documents/GitHub/DuckyRecorder
+23:31:06.752 [DEBUG] RECORDINGS_DIR = /home/ghostkernel/Documents/GitHub/DuckyRecorder/recordings
+23:31:06.752 [DEBUG] EXPORTS_DIR = /home/ghostkernel/Documents/GitHub/DuckyRecorder/exports
+23:31:06.752 [DEBUG] Diretórios criados/verificados em /home/ghostkernel/Documents/GitHub/DuckyRecorder
+23:31:06.752 [DEBUG] Diretórios garantidos:
+23:31:06.752 [DEBUG]   - /home/ghostkernel/Documents/GitHub/DuckyRecorder/recordings
+23:31:06.752 [DEBUG]   - /home/ghostkernel/Documents/GitHub/DuckyRecorder/exports
+23:31:06.755 [DEBUG] Config carregada de /home/ghostkernel/Documents/GitHub/DuckyRecorder/config/config.json
+23:31:06.755 [DEBUG] get_language() retornando: pt
+23:31:06.755 [DEBUG] Idioma obtido da config = pt
+23:31:06.755 [DEBUG] Tentando carregar /home/ghostkernel/Documents/GitHub/DuckyRecorder/DuckyRecorder/lang/pt.json
+23:31:06.755 [DEBUG] Existe? True
+23:31:06.755 [DEBUG] Carregado com sucesso, 32 strings
+23:31:09.719 [DEBUG] Diretórios garantidos:
+23:31:09.719 [DEBUG]   - /home/ghostkernel/Documents/GitHub/DuckyRecorder/recordings
+23:31:09.719 [DEBUG]   - /home/ghostkernel/Documents/GitHub/DuckyRecorder/exports

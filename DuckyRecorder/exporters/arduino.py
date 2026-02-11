@@ -38,7 +38,7 @@ class ArduinoExporter:
             # Adiciona delay baseado no timestamp
             if hasattr(ev, 'timestamp') and ev.timestamp is not None:
                 delay_ms = int((ev.timestamp - last_timestamp) * 1000)
-                if delay_ms > 10:  # Só adiciona delays significativos
+                if delay_ms > 10:
                     out.append(f"  delay({delay_ms});")
                 last_timestamp = ev.timestamp
             
@@ -78,7 +78,7 @@ class ArduinoExporter:
             elif ev.type == EventType.TEXT:
                 value = ev.data.get("value", "")
                 escaped_value = value.replace('\\', '\\\\').replace('"', '\\"')
-                if value == ' ':  # Espaço
+                if value == ' ':
                     out.append("  Keyboard.write(' ');")
                 elif len(value) == 1 and value.isprintable():
                     out.append(f'  Keyboard.print("{escaped_value}");')
@@ -90,27 +90,21 @@ class ArduinoExporter:
                 key = ev.data.get("key", "")
                 arduino_key = self.map_key(key)
                 
-                # 🔥 CORREÇÃO CRÍTICA: Adiciona release() para todas as teclas especiais
-                if "KEY_" in arduino_key:
-                    # Teclas que precisam de press + release
-                    if arduino_key == "KEY_LEFT_GUI":
-                        out.append(f"  Keyboard.press({arduino_key});")
+                # 🔥 CORREÇÃO DEFINITIVA: Press + Release para TODAS as teclas especiais
+                if arduino_key.startswith("KEY_"):
+                    # Tecla especial que precisa de press + release
+                    out.append(f"  Keyboard.press({arduino_key});")
+                    # Delay apropriado baseado na tecla
+                    if arduino_key in ["KEY_LEFT_GUI", "KEY_RETURN", "KEY_TAB"]:
                         out.append("  delay(100);")
-                        out.append(f"  Keyboard.release({arduino_key});")
-                    elif arduino_key == "KEY_RETURN":
-                        out.append(f"  Keyboard.press({arduino_key});")
-                        out.append("  delay(100);")
-                        out.append(f"  Keyboard.release({arduino_key});")
-                    elif arduino_key == "KEY_TAB":
-                        out.append(f"  Keyboard.press({arduino_key});")
-                        out.append("  delay(50);")
-                        out.append(f"  Keyboard.release({arduino_key});")
                     else:
-                        # Outras teclas especiais
-                        out.append(f"  {arduino_key};")
-                        out.append("  delay(10);")
+                        out.append("  delay(50);")
+                    out.append(f"  Keyboard.release({arduino_key});")
+                elif arduino_key == "SPACE":
+                    out.append("  Keyboard.write(' ');")
+                    out.append("  delay(10);")
                 else:
-                    # Comando já pronto (como Keyboard.print)
+                    # Comando já pronto (Keyboard.print)
                     out.append(f"  {arduino_key};")
                     out.append("  delay(10);")
 
@@ -126,46 +120,46 @@ class ArduinoExporter:
         return "\n".join(out)
 
     def map_key(self, key):
-        """Mapeia teclas para comandos Arduino COM CORREÇÃO DE RELEASE"""
+        """Mapeia teclas para comandos Arduino - RETORNA APENAS NOMES DE CONSTANTES"""
         mapping = {
-            "Key.enter": "Keyboard.press(KEY_RETURN)",  # Será corrigido no código acima
-            "Key.backspace": "Keyboard.press(KEY_BACKSPACE)",
-            "Key.tab": "Keyboard.press(KEY_TAB)",  # Será corrigido no código acima
-            "Key.esc": "Keyboard.press(KEY_ESC)",
-            "Key.space": "Keyboard.write(' ')",
-            "Key.up": "Keyboard.press(KEY_UP_ARROW)",
-            "Key.down": "Keyboard.press(KEY_DOWN_ARROW)",
-            "Key.left": "Keyboard.press(KEY_LEFT_ARROW)",
-            "Key.right": "Keyboard.press(KEY_RIGHT_ARROW)",
-            "Key.delete": "Keyboard.press(KEY_DELETE)",
-            "Key.home": "Keyboard.press(KEY_HOME)",
-            "Key.end": "Keyboard.press(KEY_END)",
-            "Key.page_up": "Keyboard.press(KEY_PAGE_UP)",
-            "Key.page_down": "Keyboard.press(KEY_PAGE_DOWN)",
-            "Key.caps_lock": "Keyboard.press(KEY_CAPS_LOCK)",
-            "Key.f1": "Keyboard.press(KEY_F1)",
-            "Key.f2": "Keyboard.press(KEY_F2)",
-            "Key.f3": "Keyboard.press(KEY_F3)",
-            "Key.f4": "Keyboard.press(KEY_F4)",
-            "Key.f5": "Keyboard.press(KEY_F5)",
-            "Key.f6": "Keyboard.press(KEY_F6)",
-            "Key.f7": "Keyboard.press(KEY_F7)",
-            "Key.f8": "Keyboard.press(KEY_F8)",
-            "Key.f9": "Keyboard.press(KEY_F9)",
-            "Key.f10": "Keyboard.press(KEY_F10)",
-            "Key.f11": "Keyboard.press(KEY_F11)",
-            "Key.f12": "Keyboard.press(KEY_F12)",
-            "Key.shift": "Keyboard.press(KEY_LEFT_SHIFT)",
-            "Key.ctrl": "Keyboard.press(KEY_LEFT_CTRL)",
-            "Key.alt": "Keyboard.press(KEY_LEFT_ALT)",
-            "Key.cmd": "KEY_LEFT_GUI",  # Nome da constante
+            "Key.enter": "KEY_RETURN",
+            "Key.backspace": "KEY_BACKSPACE",
+            "Key.tab": "KEY_TAB",
+            "Key.esc": "KEY_ESC",
+            "Key.space": "SPACE",
+            "Key.up": "KEY_UP_ARROW",
+            "Key.down": "KEY_DOWN_ARROW",
+            "Key.left": "KEY_LEFT_ARROW",
+            "Key.right": "KEY_RIGHT_ARROW",
+            "Key.delete": "KEY_DELETE",
+            "Key.home": "KEY_HOME",
+            "Key.end": "KEY_END",
+            "Key.page_up": "KEY_PAGE_UP",
+            "Key.page_down": "KEY_PAGE_DOWN",
+            "Key.caps_lock": "KEY_CAPS_LOCK",
+            "Key.f1": "KEY_F1",
+            "Key.f2": "KEY_F2",
+            "Key.f3": "KEY_F3",
+            "Key.f4": "KEY_F4",
+            "Key.f5": "KEY_F5",
+            "Key.f6": "KEY_F6",
+            "Key.f7": "KEY_F7",
+            "Key.f8": "KEY_F8",
+            "Key.f9": "KEY_F9",
+            "Key.f10": "KEY_F10",
+            "Key.f11": "KEY_F11",
+            "Key.f12": "KEY_F12",
+            "Key.shift": "KEY_LEFT_SHIFT",
+            "Key.ctrl": "KEY_LEFT_CTRL",
+            "Key.alt": "KEY_LEFT_ALT",
+            "Key.cmd": "KEY_LEFT_GUI",
         }
         
-        # Se for uma tecla de caractere simples
-        if key.startswith("Key."):
-            return mapping.get(key, f'Keyboard.print("UNKNOWN_KEY:{key}")')
+        # Se for uma tecla especial mapeada
+        if key in mapping:
+            return mapping[key]
         else:
-            # Caracteres normais
+            # Caracteres normais - retorna comando completo
             escaped_key = key.replace('\\', '\\\\').replace('"', '\\"')
             return f'Keyboard.print("{escaped_key}")'
 
@@ -181,7 +175,6 @@ def export_to_arduino(input_path: str, output_path: str, fast_mode=True, zero_mo
 
     timeline = recording_to_timeline(recording_json)
     
-    # Adiciona timestamps aos eventos
     events = recording_json.get("events", [])
     event_idx = 0
     
