@@ -2,31 +2,31 @@
 
 ![DuckyRecorder Menu](docs/menu.png)
 
-DuckyRecorder é uma ferramenta CLI para gravação de eventos HID (teclado e mouse) e exportação das interações em formatos compatíveis com dispositivos USB HID, como Rubber Ducky e placas baseadas em ATmega32u4.
+DuckyRecorder is a CLI tool for recording HID events (keyboard and mouse) and exporting interactions into formats compatible with USB HID devices such as Rubber Ducky and ATmega32u4-based boards.
 
-> ⚠️ Uso restrito a ambientes autorizados, testes de segurança com permissão explícita e automação legítima.
+> ⚠️ Restricted to authorized environments, security testing with explicit permission, and legitimate automation.
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Features
 
-* 🎙️ **Gravação em tempo real** – Captura eventos de teclado e mouse com timestamps precisos
-* ⏯️ **Controle inteligente** – Pausa/continuação com teclas configuráveis (F9/F10 padrão)
-* 👁️ **Visualização ao vivo** – Exibe eventos capturados em tempo real durante a gravação
-* 💾 **Armazenamento estruturado** – Salva gravações em formato JSON com metadados
-* 📤 **Exportação multiplataforma** – Converte para:
+* 🎙️ **Real-time recording** – Captures keyboard and mouse events with precise timestamps
+* ⏯️ **Smart control** – Pause/resume with configurable hotkeys (F9/F10 by default)
+* 👁️ **Live preview** – Displays captured events in real time during recording
+* 💾 **Structured storage** – Saves recordings in JSON format with metadata
+* 📤 **Multi-platform export** – Converts to:
 
   * Rubber Ducky (`.ducky.txt`)
-  * Arduino HID (`.ino`) com suporte a `Keyboard.h` e `Mouse.h`
-* 🌍 **Internacionalização** – Suporte a Português e Inglês
-* 🎨 **Interface CLI rica** – Cores, banners adaptativos e menus interativos
-* ⚙️ **Configuração persistente** – Configurações salvas automaticamente em JSON
-* 🔧 **Sistema de logs** – Logs detalhados para debugging e monitoramento
-* 🖱️ **Controle de mouse preciso** – Movimento relativo, cliques e zeramento inicial
+  * Arduino HID (`.ino`) with `Keyboard.h` and `Mouse.h` support
+* 🌍 **Internationalization** – Portuguese and English support
+* 🎨 **Rich CLI interface** – Colors, adaptive banners, and interactive menus
+* ⚙️ **Persistent configuration** – Settings automatically saved in JSON
+* 🔧 **Logging system** – Detailed logs for debugging and monitoring
+* 🖱️ **Precise mouse control** – Relative movement, clicks, and optional cursor reset
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```text
 DuckyRecorder/
@@ -63,79 +63,79 @@ DuckyRecorder/
 
 ---
 
-## 🛠️ Instalação
+## 🛠️ Installation
 
-### Pré-requisitos
+### Requirements
 
 * Python 3.8+
 * pip
 
-### Passo a passo
+### Step by step
 
 ```bash
-git clone https://github.com/seu-usuario/DuckyRecorder.git
+git clone https://github.com/your-username/DuckyRecorder.git
 cd DuckyRecorder
 pip install -r requirements.txt
 ```
 
-### Dependências
+### Dependencies
 
 * `pynput>=1.7.6`
 * `colorama>=0.4.6`
 
 ---
 
-## ▶️ Como Usar
+## ▶️ Usage
 
-### Execução
+### Run
 
 ```bash
 python -m DuckyRecorder
-# ou
+# or
 python DuckyRecorder/main.py
 ```
 
-### Fluxo típico
+### Typical workflow
 
-1. Iniciar gravação
-2. Executar ações (digitação, cliques, etc.)
-3. Parar gravação (F10 por padrão)
-4. Exportar para o formato desejado
-5. Utilizar o arquivo exportado em ambiente autorizado
+1. Start recording
+2. Perform actions (typing, clicks, etc.)
+3. Stop recording (F10 by default)
+4. Export to the desired format
+5. Use the exported file in an authorized environment
 
 ---
 
-## 📦 Formatos de Exportação
+## 📦 Export Formats
 
 ### 1️ Rubber Ducky (`.ducky.txt`)
 
-* Converte texto para `STRING`
-* Preserva `DELAY`
-* Agrupa caracteres consecutivos
-* Comenta eventos não suportados
+* Converts text to `STRING`
+* Preserves `DELAY`
+* Groups consecutive characters
+* Comments unsupported events
 
 ### 2️ Arduino HID (`.ino`)
 
-Compatível com:
+Compatible with:
 
 * Arduino Leonardo
 * Arduino Micro
 * Pro Micro
 * ATmega32u4
 
-Recursos:
+Features:
 
-* `Keyboard.print()` para texto
-* `Keyboard.press()` / `Keyboard.release()` para teclas especiais
-* `Mouse.move()` com segmentação automática
-* Cliques esquerdo, direito e meio
-* Zeramento inicial opcional do cursor
+* `Keyboard.print()` for text
+* `Keyboard.press()` / `Keyboard.release()` for special keys
+* `Mouse.move()` with automatic segmentation
+* Left, right, and middle clicks
+* Optional initial cursor reset
 
 ---
 
-## ⚙️ Configuração
+## ⚙️ Configuration
 
-Arquivo: `config/config.json`
+File: `config/config.json`
 
 ```json
 {
@@ -153,41 +153,41 @@ Arquivo: `config/config.json`
 
 ---
 
-## 🔐 Uso Ético
+## 🔐 Ethical Use
 
-Esta ferramenta deve ser utilizada exclusivamente para:
+This tool must be used exclusively for:
 
-* Ambientes próprios
-* Testes autorizados
-* Pesquisa e estudo
-* Automação legítima
-* Acessibilidade
+* Personal environments
+* Authorized testing
+* Research and study
+* Legitimate automation
+* Accessibility purposes
 
-O uso indevido pode violar legislações locais e políticas institucionais.
+Misuse may violate local laws and institutional policies.
 
 ---
 
 ## 🐛 Logs
 
-* Logs em tempo real no menu
-* Arquivos persistentes em `logs/`
-* Níveis: DEBUG, INFO, WARNING, ERROR
-* Rotação automática (até 1000 mensagens em memória)
+* Real-time logs in the menu
+* Persistent files in `logs/`
+* Levels: DEBUG, INFO, WARNING, ERROR
+* Automatic rotation (up to 1000 messages in memory)
 
 ---
 
-## 🧠 Roadmap Futuro
+## 🧠 Future Roadmap
 
-* Replay local automático
-* Filtros avançados de eventos
-* Editor visual de timeline
-* Plugins de exportação
-* API REST
-* Suporte a mais idiomas
+* Automatic local replay
+* Advanced event filters
+* Visual timeline editor
+* Export plugins
+* REST API
+* Additional language support
 
 ---
 
-## 📄 Licença
+## 📄 License
 
 MIT License
 
@@ -195,34 +195,34 @@ Copyright (c) 2026 MarllonDevSec
 
 ---
 
-## 🤝 Contribuições
+## 🤝 Contributing
 
 1. Fork
-2. Criar branch
+2. Create a branch
 3. Commit
 4. Push
-5. Pull Request
+5. Open a Pull Request
 
 ---
 
-## 🏗️ Arquitetura
+## 🏗️ Architecture
 
 ### Recorder
 
-Responsável pelos listeners e captura de eventos.
+Handles listeners and event capturing.
 
 ### Timeline
 
-Gerencia sequência temporal e normalização de eventos.
+Manages temporal sequencing and event normalization.
 
 ### Exporters
 
-Transformam eventos para formatos específicos.
+Transform events into specific output formats.
 
 ### Language Manager
 
-Carregamento dinâmico de idiomas.
+Dynamic language loading system.
 
 ### Config Manager
 
-Persistência e merge automático de configurações.
+Configuration persistence and automatic merging system.
