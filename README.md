@@ -1,5 +1,7 @@
 # 🦆 DuckyRecorder v1.0.0
 
+![DuckyRecorder Menu](docs/menu.png)
+
 DuckyRecorder é uma ferramenta CLI para gravação de eventos HID (teclado e mouse) e exportação das interações em formatos compatíveis com dispositivos USB HID, como Rubber Ducky e placas baseadas em ATmega32u4.
 
 > ⚠️ Uso restrito a ambientes autorizados, testes de segurança com permissão explícita e automação legítima.
@@ -52,6 +54,8 @@ DuckyRecorder/
 ├── recordings/
 ├── exports/
 ├── logs/
+├── docs/
+│   └── menu.png
 ├── requirements.txt
 ├── LICENSE
 └── README.md
@@ -103,14 +107,14 @@ python DuckyRecorder/main.py
 
 ## 📦 Formatos de Exportação
 
-### 1️⃣ Rubber Ducky (`.ducky.txt`)
+### 1️ Rubber Ducky (`.ducky.txt`)
 
 * Converte texto para `STRING`
 * Preserva `DELAY`
 * Agrupa caracteres consecutivos
 * Comenta eventos não suportados
 
-### 2️⃣ Arduino HID (`.ino`)
+### 2️ Arduino HID (`.ino`)
 
 Compatível com:
 
